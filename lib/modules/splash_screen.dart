@@ -11,9 +11,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromRGBO(252, 21, 59, 1),
-      body: _buildBody(),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color.fromRGBO(252, 21, 59, 1),
+        body: _buildBody(),
+      ),
     );
   }
 
