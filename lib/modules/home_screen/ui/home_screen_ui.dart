@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moovbe/modules/home_screen/home_screen_provider.dart';
+import 'package:moovbe/modules/home_screen/model/buslist_model.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreenUI extends StatefulWidget {
@@ -13,7 +14,7 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
   @override
   void initState() {
     Future.microtask(() async {
-      await context.read<HomeScreenProvider>().retrieveBusList();
+      context.read<HomeScreenProvider>().retrieveBusList();
     });
     // TODO: implement initState
     super.initState();
@@ -123,6 +124,13 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
               ),
             ],
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20, right: 200, bottom: 10),
+            child: Text(
+              "${provider.busDeatails.busList?.length ?? 0} Buses Found",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
           Expanded(child: _busList(provider))
         ],
       ),
@@ -130,13 +138,67 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
   }
 
   Widget _busList(HomeScreenProvider provider) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, right: 210),
-      child: Text(
-        "21 Buses Found",
-        style: TextStyle(
-            fontSize: 13, color: Colors.grey, fontWeight: FontWeight.bold),
-      ),
-    );
+    return provider.isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : ListView.separated(
+            itemBuilder: (context, index) {
+              BusList bus = provider.busDeatails.busList![index];
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 10,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 80,
+                              color: Colors.grey.shade300,
+                            ),
+                            bus.image != null
+                                ? Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Image.asset(
+                                        "assets/images/image 3.png"))
+                                : Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Image.asset(
+                                        "assets/images/image 3.png")),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            bus.name ?? '',
+                            style: TextStyle(),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ),
+                        ElevatedButton(
+                            style:
+                                ElevatedButton.styleFrom(primary: Colors.red),
+                            onPressed: () {},
+                            child: const Text("Manage")),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(
+                  height: 20,
+                ),
+            itemCount: provider.busDeatails.busList?.length ?? 0);
   }
 }

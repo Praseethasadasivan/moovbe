@@ -1,5 +1,11 @@
-class ApiConfig {
-  static AccessCredentials? accessCredentials;
+import 'package:flutter/cupertino.dart';
+
+class ApiConfig with ChangeNotifier {
+  AccessCredentials? accessCredentials;
+  setAccessCredentials(AccessCredentials _accessCredential) {
+    accessCredentials = _accessCredential;
+    notifyListeners();
+  }
 }
 
 class AccessCredentials {

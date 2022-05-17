@@ -30,7 +30,7 @@ class ApiService {
 
     try {
       if (isAuthenticated && _authToken != '') {
-        _headers['access-token'] = _authToken;
+        _headers['Authorization'] = _authToken;
       }
       if (headers != null) {
         _headers.addAll(headers);

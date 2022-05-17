@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:moovbe/modules/login/login_service.dart';
+import 'package:moovbe/utils/apiconfig.dart';
 
 class LoginProvider extends ChangeNotifier {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late ApiConfig _apiConfig;
+  onUpdate(ApiConfig apiConfig) {
+    _apiConfig = apiConfig;
+  }
 
   Future loginRequest() async {
     dynamic header = {
@@ -11,7 +16,8 @@ class LoginProvider extends ChangeNotifier {
       "password": passwordController.text
     };
     try {
-      var response = await LoginService().loginApiRequest(header);
+      AccessCredentials response = await LoginService().loginApiRequest(header);
+      _apiConfig.setAccessCredentials(response);
     } catch (e) {
       print(e);
     }

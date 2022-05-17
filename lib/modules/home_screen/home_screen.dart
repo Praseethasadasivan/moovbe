@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moovbe/modules/home_screen/home_screen_provider.dart';
 import 'package:moovbe/modules/home_screen/ui/home_screen_ui.dart';
+import 'package:moovbe/utils/apiconfig.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,8 +14,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
+    return ChangeNotifierProxyProvider<ApiConfig, HomeScreenProvider>(
       create: (context) => HomeScreenProvider(),
+      update: (context, apiconfig, homeprovider) {
+        homeprovider?.onUpdate(apiconfig);
+        return homeprovider!;
+      },
       child: const HomeScreenUI(),
     );
   }
