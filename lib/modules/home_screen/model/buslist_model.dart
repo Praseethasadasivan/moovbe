@@ -28,7 +28,7 @@ class BusList {
   int? id;
   String? name;
   String? image;
-  String? seatCount;
+  int? seatCount;
   String? type;
   Null? driver;
 
@@ -39,7 +39,7 @@ class BusList {
     id = json['id'];
     name = json['name'];
     image = json['image'];
-    seatCount = json['seat_count'];
+    seatCount =int.tryParse(json['seat_count']);
     type = json['type'];
     driver = json['driver'];
   }
