@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:moovbe/modules/bus/bus.dart';
 import 'package:moovbe/modules/home_screen/home_screen_provider.dart';
 import 'package:moovbe/modules/home_screen/model/buslist_model.dart';
+import 'package:moovbe/modules/seat_manage/seat_manage.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreenUI extends StatefulWidget {
@@ -51,7 +53,8 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
                 width: 158,
                 height: 176,
                 decoration: BoxDecoration(
-                    color: Colors.red, borderRadius: BorderRadius.circular(10)),
+                    color: Color.fromRGBO(252, 21, 59, 1),
+                    borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -127,7 +130,7 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
           Padding(
             padding: const EdgeInsets.only(top: 20, right: 200, bottom: 10),
             child: Text(
-              "${provider.busDeatails.busList?.length ?? 0} Buses Found",
+              "${provider.busDeatails?.busList?.length ?? 0} Buses Found",
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
@@ -138,13 +141,13 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
   }
 
   Widget _busList(HomeScreenProvider provider) {
-    return provider.isLoading
+    return provider.isLoading || provider.busDeatails?.busList == null
         ? const Center(
             child: CircularProgressIndicator(),
           )
         : ListView.separated(
             itemBuilder: (context, index) {
-              BusList bus = provider.busDeatails.busList![index];
+              BusList? bus = provider.busDeatails?.busList![index];
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 2),
@@ -165,30 +168,41 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
                               height: 80,
                               color: Colors.grey.shade300,
                             ),
-                            bus.image != null
+                            bus?.image != null
                                 ? Padding(
                                     padding: const EdgeInsets.all(15),
                                     child: Image.asset(
-                                        "assets/images/image 3.png"))
+                                      "assets/images/image 3.png",
+                                      fit: BoxFit.cover,
+                                    ))
                                 : Padding(
                                     padding: const EdgeInsets.all(10),
                                     child: Image.asset(
-                                        "assets/images/image 3.png")),
+                                      "assets/images/image 3.png",
+                                      fit: BoxFit.cover,
+                                    )),
                           ],
                         ),
                         SizedBox(
                           width: 100,
                           child: Text(
-                            bus.name ?? '',
+                            bus?.name ?? '',
                             style: TextStyle(),
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.fade,
                           ),
                         ),
                         ElevatedButton(
-                            style:
-                                ElevatedButton.styleFrom(primary: Colors.red),
-                            onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                                primary: Color.fromRGBO(252, 21, 59, 1)),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Bus(
+                                            bus: bus,
+                                          )));
+                            },
                             child: const Text("Manage")),
                       ],
                     ),
@@ -199,6 +213,6 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
             separatorBuilder: (context, index) => const SizedBox(
                   height: 20,
                 ),
-            itemCount: provider.busDeatails.busList?.length ?? 0);
+            itemCount: provider.busDeatails?.busList?.length ?? 0);
   }
 }

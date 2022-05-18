@@ -4,8 +4,8 @@ import 'package:moovbe/modules/home_screen/model/buslist_model.dart';
 import 'package:moovbe/utils/apiconfig.dart';
 
 class HomeScreenProvider extends ChangeNotifier {
-  late ApiConfig _apiConfig;
-  late BusDeatailsModel busDeatails;
+  ApiConfig? _apiConfig;
+  BusDeatailsModel? busDeatails;
   bool isLoading = true;
   onUpdate(ApiConfig apiConfig) {
     _apiConfig = apiConfig;
@@ -18,9 +18,9 @@ class HomeScreenProvider extends ChangeNotifier {
 
   Future retrieveBusList() async {
     setLoading(true);
-    Future.delayed(const Duration(seconds: 3), () async {
+    Future.delayed(const Duration(seconds: 5), () async {
       busDeatails = await HomeScreenService()
-          .downloadBusDeatilsRequest(_apiConfig.accessCredentials);
+          .downloadBusDeatilsRequest(_apiConfig?.accessCredentials);
       notifyListeners();
       setLoading(false);
     });

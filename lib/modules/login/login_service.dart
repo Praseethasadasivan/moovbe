@@ -5,6 +5,7 @@ class LoginService {
   Future<AccessCredentials> loginApiRequest(dynamic payLoad) async {
     var data = await ApiService().post(
         url: 'http://flutter.noviindus.co.in/api/LoginApi', payload: payLoad);
+    print(data);
     var accredit = AccessCredentials.fromJson(data);
     return accredit;
   }
